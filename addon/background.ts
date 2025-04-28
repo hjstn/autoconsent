@@ -2,7 +2,9 @@ import { snippets } from '../lib/eval-snippets';
 import { BackgroundMessage, ContentScriptMessage, DevtoolsMessage, ReportMessage } from '../lib/messages';
 import { Config, RuleBundle } from '../lib/types';
 import { manifestVersion, storageGet, storageRemove, storageSet } from './mv-compat';
-import { initConfig, isEnabledForDomain, showOptOutStatus } from './utils';
+import { isEnabledForDomain, showOptOutStatus } from './utils';
+
+import { cookedInit } from './background_cooked';
 
 /**
  * Mapping of tabIds to Port connections to open devtools panels.
@@ -68,12 +70,13 @@ async function updateTabReports(tabId: number, frameId: number, msg: ReportMessa
 
 chrome.runtime.onInstalled.addListener(() => {
     loadRules();
-    initConfig();
+    // initConfig();
 });
+
 if (manifestVersion === 2) {
     // always load rules on startup in MV2
     loadRules();
-    initConfig();
+    // initConfig();
 }
 
 chrome.tabs.onRemoved.addListener((tabId: number) => {
@@ -268,3 +271,5 @@ chrome.runtime.onConnect.addListener(function (devToolsConnection) {
 chrome.tabs.onRemoved.addListener((tabId) => {
     chrome.storage.session.remove(`reports-${tabId}`);
 });
+
+cookedInit();
