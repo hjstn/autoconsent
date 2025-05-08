@@ -8,7 +8,7 @@ class CookedProtocol {
     connect() {
         if (this.ws) this.ws.close();
 
-        this.ws = new WebSocket('ws://localhost:5630');
+        this.ws = new WebSocket('ws://localhost:56303');
 
         this.ws.onopen = this._open.bind(this);
         this.ws.onclose = this._close.bind(this);
